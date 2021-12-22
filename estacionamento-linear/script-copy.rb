@@ -6,7 +6,7 @@ total_cars = 0
 total_spots = 0
 parking_lot = Array.new
 old_total_spots = 0 
-
+can_proceed = true
 
 input.each_with_index do |item, index|
   item = item.split.map {|num| num.to_i }
@@ -18,9 +18,10 @@ input.each_with_index do |item, index|
     # puts "bateu em cima"
     
     # puts "Quantidade de carros que o atual partkin lot suporta :#{old_total_spots}"
+    # if old_total_spots 
     # puts "Quantiade de carros que supostamente estariam la: #{parking_lot.length}"
-    if !parking_lot.empty?
-      while !parking_lot.empty? # and (parking_lot.length <= old_total_spots)
+    if !parking_lot.empty? and can_proceed
+      while !parking_lot.empty? and (parking_lot.length <= old_total_spots)
         if parking_lot.length.eql? 1 or
         (parking_lot.last[1] < parking_lot[0...-1].last[1]) or 
         (parking_lot[0...-1].last[1].eql? parking_lot.last[0])
@@ -44,6 +45,7 @@ input.each_with_index do |item, index|
     end
     
     parking_lot.clear
+    can_proceed = true
     aux = 1
   else
     drive_in, drive_out = item
@@ -51,10 +53,10 @@ input.each_with_index do |item, index|
     # puts "TOTAL DE VAGAS NA GARAGEM: #{total_spots}"
     # puts "TAMANHO DA GARAGEM OCUPADA: #{parking_lot.length}"
     
-    if parking_lot.empty?
+    if parking_lot.empty? and can_proceed
       # puts "Garagem ta vazia, so vou colocar"
       parking_lot << item
-    elsif parking_lot.length <= total_spots
+    elsif (parking_lot.length <= total_spots) and can_proceed
       # puts "oq vai entrar agora ele vai entrar depois que o ultimo sair?"
       # puts "drive_in > parking_lot.last[1] #{drive_in >= parking_lot.last[1]}"
       if drive_in >= parking_lot.last[1]
@@ -97,6 +99,10 @@ input.each_with_index do |item, index|
         # puts "#{drive_out < parking_lot.last[1]}"
 
         parking_lot << item
+      else
+        # puts "Vai dar ruim, mas deixa rolar"
+        can_proceed = false
+        puts "Nao"
       end
 
       # parking_lot.each do |item|
